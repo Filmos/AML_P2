@@ -5,7 +5,7 @@ from src.model import WithModel
 from src.scores import Scoring
 
 class Params(E.ParamsBase):
-    time_limit = 30
+    time_limit = 60
     dataset = DATASETS[0]
     method = FEATURE_SELECTION_METHODS[0]
     max_features = 1000
