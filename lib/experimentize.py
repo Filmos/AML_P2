@@ -1,10 +1,11 @@
-# v0.6
+# v0.8
 
 from inspect import signature as _signature
 import types as _types
 import re as _re
 import pandas as _pd
 import traceback as _traceback
+import os as _os
 
 __all__ = ['param', 'experimentize', 'AsExperiment', 'ParamsBase']
 
@@ -26,7 +27,7 @@ class _ParamMarker:
     
     def _transform(self, *, name, value, target):
         if self.config['as_func'] is not None:
-            func_name = self.config['as_func'].format(_re.sub("\\W", "", _re.sub("\s+|[_\-]", "_", value.lower())))
+            func_name = self.config['as_func'].format(_re.sub("\\W", "", _re.sub("\s+|[_\-]", "_", str(value).lower())))
             if not hasattr(target, func_name):
                 raise Exception(f'Function {func_name} is not defined (derived from {name}="{value}")')
             return getattr(target, func_name)
@@ -135,6 +136,8 @@ class AsExperiment:
                 except FileNotFoundError:
                     pass
             
+            if self.with_cache is not None:
+                _os.makedirs(_os.path.dirname(self.with_cache), exist_ok=True)
             for keys in self.iterate_experiments(scope):
                 try:
                     if self.with_cache is not None and self.check_if_present(total_results, keys):
