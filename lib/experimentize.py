@@ -174,6 +174,8 @@ class AsExperiment:
 
     @staticmethod
     def _convert_to_dataframe(results, keys):
+        if results is None:
+            return _pd.DataFrame([keys])
         if isinstance(results, _pd.DataFrame):
             for k, v in keys.items():
                 results[k] = v
